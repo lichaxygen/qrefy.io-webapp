@@ -75,13 +75,13 @@ function Contact() {
     };
 
     const handleCancel = () => {
-    // Aquí puedes manejar la lógica de cancelar el formulario
-    // Reiniciando los campos, mostrando una alerta, redirigiendo, etc.
-    setReason('');
-    setSubject('');
-    setComment('');
-    setFileList([]);
-    setErrors({});
+        // Aquí puedes manejar la lógica de cancelar el formulario
+        // Reiniciando los campos, mostrando una alerta, redirigiendo, etc.
+        setReason('');
+        setSubject('');
+        setComment('');
+        setFileList([]);
+        setErrors({});
     };
 
     return (

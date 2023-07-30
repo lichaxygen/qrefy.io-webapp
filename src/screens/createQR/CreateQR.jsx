@@ -6,40 +6,20 @@ import ButtonCustom from '../../components/button/ButtonCustom';
 import { URLBASEAPIQR, CONFIGHEADER } from '../../config/paths.js';
 
 function CreateQR() {
-    const [URL, setURL] = useState('');
-    const [size, setSize] = useState('');
-    const [margin, setMargin] = useState(''); 
-    const [scale, setScale] = useState('');
-    const [colorQR, setColorQR] = useState('#000000');
-    const [colorQRbg, setColorQRbg] = useState('#ffffff');
+    const [state, setState] = useState({ URL: '', size:'', margin:'', scale:'', colorQR:'#000000',
+                                        colorQRbg:'#ffffff', qrCodeImage:''} );
+    const [qrCodeImage, setQrCodeImage] = useState('');    
     const [errors, setErrors] = useState({});
-    const [qrCodeImage, setQrCodeImage] = useState('');
 
-    const handleURLChange = (event) =>{
-        setURL(event.target.value);
+    const handleChange= (event) => {
+        const { name, value } = event.target;
+        setState( {...state, [name]: value} );  
     };
-    const handleSizeChange = (event) =>{
-        setSize(event.target.value);
-    };
-    const handleMarginChange = (event) =>{
-        setMargin(event.target.value);
-    }; 
-    const handleScaleChange = (event) =>{
-        setScale(event.target.value);
-    }; 
     const handleColorQRChange = (newColor) => {
-        setColorQR(newColor);
-      };
-    
-    const handleInputColorQRChange = (event) => {
-        setColorQR(event.target.value);
+        setState( {...state, colorQR: newColor} )
     };
     const handleColorQRbgChange = (newColor) => {
-        setColorQRbg(newColor);
-      };
-    
-    const handleInputColorQRbgChange = (event) => {
-        setColorQRbg(event.target.value);
+        setState( {...state, colorQRbg: newColor} )
     };
 
     const arrayBufferToBase64 = (buffer) => {
@@ -57,13 +37,13 @@ function CreateQR() {
         try {
             const response = await axios.get(URLBASEAPIQR, {
                 params: {
-                    url: URL,
+                    url: state.URL,
                     format: format,
-                    size: size, 
-                    colorDark: colorQR, 
-                    colorLight: colorQRbg, 
-                    margin: margin, 
-                    scale: scale, 
+                    size: state.size, 
+                    colorDark: state.colorQR, 
+                    colorLight: state.colorQRbg, 
+                    margin: state.margin, 
+                    scale: state.scale, 
                 },
                 CONFIGHEADER,
                 responseType: 'arraybuffer', // Especifica que la respuesta debe ser un array de bytes
@@ -84,13 +64,13 @@ function CreateQR() {
         const errors = {};
         const reg=/^#([0-9a-f]{3}){1,2}$/i;
 
-        if (!URL) {
+        if (!state.URL) {
             errors.URL = 'La URL es obligatoria.';
         }
-        if (!reg.test(colorQRbg)){
+        if (!reg.test(state.colorQRbg)){
             errors.ColorQR = 'El código de color QR no es válido.'
         }
-        if(!reg.test(colorQRbg)){   
+        if(!reg.test(state.colorQRbg)){   
             errors.ColorQRbg = 'El código de color de fondo no es válido.'
         }
 
@@ -98,29 +78,18 @@ function CreateQR() {
 
         if (Object.keys(errors).length === 0) {
             // Aquí puedes realizar la lógica de envío del formulario
-            console.log({URL,size,margin,scale,colorQR,colorQRbg});
+            console.log(state);
 
             generateQRCode();
 
-            // Luego puedes reiniciar los campos del formulario
-            /* setURL('');
-            setSize('');
-            setMargin(''); 
-            setScale('');
-            setColorQR('#000000');
-            setColorQRbg('#ffffff'); */
         }
 
     }
     const handleCancel = () => {
         // Aquí puedes manejar la lógica de cancelar el formulario
         // Reiniciando los campos, mostrando una alerta, redirigiendo, etc.
-        setURL('');
-        setSize('');
-        setMargin(''); 
-        setScale('');
-        setColorQR('#000000');
-        setColorQRbg('#ffffff');
+        setState({ URL: '', size:'', margin:'',scale:'',colorQR:'#000000',
+                    colorQRbg:'#ffffff',qrCodeImage:''})
         setErrors({});
     }
 
@@ -135,6 +104,7 @@ function CreateQR() {
     const handleDiscard = () => {
         setQrCodeImage('');
     }
+    
     return (
         <Container>
             <h2>Generar código QR</h2>
@@ -146,8 +116,9 @@ function CreateQR() {
                         <InputWrapper>
                             <Input
                                 type="text"
-                                value={URL} 
-                                onChange={handleURLChange}
+                                name='URL'
+                                value={state.URL} 
+                                onChange={e => handleChange(e)}
                                 placeholder='Ej: http://www.mipagina.com'
                                 required
                             />
@@ -160,10 +131,11 @@ function CreateQR() {
                             <ColorPickerForm>
                                 <Input
                                     type="text"
-                                    value={colorQR}
-                                    onChange={handleInputColorQRChange}
+                                    name='colorQR'
+                                    value={state.colorQR}
+                                    onChange={e => handleChange(e)}
                                 />
-                                <PopoverPicker color={colorQR} onChange={handleColorQRChange} />
+                                <PopoverPicker color={state.colorQR} onChange={handleColorQRChange} />
                             </ColorPickerForm>
                         </InputWrapper>
                         {errors.ColorQR && <ErrorMessage>{errors.ColorQR}</ErrorMessage>}
@@ -174,10 +146,11 @@ function CreateQR() {
                             <ColorPickerForm>
                                 <Input
                                     type="text"
-                                    value={colorQRbg}
-                                    onChange={handleInputColorQRbgChange}
+                                    name='colorQRbg'
+                                    value={state.colorQRbg}
+                                    onChange={e => handleChange(e)}
                                 />
-                                <PopoverPicker color={colorQRbg} onChange={handleColorQRbgChange} />
+                                <PopoverPicker color={state.colorQRbg} onChange={handleColorQRbgChange} />
                             </ColorPickerForm>
                         </InputWrapper>
                         {errors.ColorQRbg && <ErrorMessage>{errors.ColorQRbg}</ErrorMessage>}
@@ -187,9 +160,10 @@ function CreateQR() {
                         <InputWrapper>
                             <Input
                                 type="number"
-                                min="1" 
-                                value={size} 
-                                onChange={handleSizeChange}
+                                min="1"
+                                name='size' 
+                                value={state.size} 
+                                onChange={e => handleChange(e)}
                                 placeholder='Tamaño por defecto 30px'
                             />
                         </InputWrapper>
@@ -199,9 +173,10 @@ function CreateQR() {
                         <InputWrapper>
                             <Input
                                 type="number"
-                                min="0" 
-                                value={margin} 
-                                onChange={handleMarginChange}
+                                min="0"
+                                name='margin'
+                                value={state.margin} 
+                                onChange={e => handleChange(e)}
                                 placeholder='Margen por defecto 4px'
                             />
                         </InputWrapper>
@@ -212,8 +187,9 @@ function CreateQR() {
                             <Input
                                 type="number"
                                 min="1" 
-                                value={scale} 
-                                onChange={handleScaleChange}
+                                name='scale'
+                                value={state.scale} 
+                                onChange={e => handleChange(e)}
                                 placeholder='Escala por defecto 4'
                             />
                         </InputWrapper>

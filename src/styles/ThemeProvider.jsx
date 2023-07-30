@@ -1,3 +1,4 @@
+import { redirect } from "react-router";
 import { ThemeProvider } from "styled-components";
 
 const theme = {
@@ -15,6 +16,8 @@ const theme = {
         activeItem: "#b3a7f4", //purple illusion, mix between Lilac spring, Pan purple y white
         borderItem: "#6A82FB", //Pan purple
         sidebarBg: "#ffe0e0", // Pink pleasure
+        danger: "red",
+        warning: "yellow",  
         /* cardTitleBg: "rgba( 149, 20, 52, 0.65 )",
         cardBg: "rgba( 149, 20, 52, 0.30 )",
         cardShadow: "rgba( 159, 20, 52, 0.37 )", */
