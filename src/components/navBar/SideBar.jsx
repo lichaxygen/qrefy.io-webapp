@@ -36,7 +36,11 @@ const SidebarData = [
         heading: "API docs",
         path: APIDOCS,
     },
-    
+    {
+        icon: UilClipboardAlt,
+        heading: "Login",
+        path: '/login',
+    },
 ];
 
 const Sidebar = () => {

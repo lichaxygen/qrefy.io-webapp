@@ -8,6 +8,7 @@ const theme = {
         primaryVariant: "#5f27cd", // NASU PURPLE
         light: "whitesmoke", 
         grey: "#c8d6e5", // LIGHT BLUE BALLERINA
+        gray: "gray",
         white: "white", 
         black: "black",
         glass: "rgba(255, 255, 255, 0.54)",

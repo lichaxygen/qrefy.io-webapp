@@ -8,6 +8,7 @@ import Billing from "./screens/billing/Billing"
 import Contact from "./screens/contact/Contact"
 import Apidocs from "./screens/apidocs/Apidocs"
 import CreateQR from "./screens/createQR/CreateQR";
+import Login from "./screens/login/Login";
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
                     <Route path={ BILLING } element={<Billing/> } />
                     <Route path={ CONTACT } element={<Contact/> } />
                     <Route path={ APIDOCS } element={<Apidocs/> } />
+                    <Route path='/login' element={<Login/> } />       
                 </Route>    
             </Routes>
         </BrowserRouter> 
