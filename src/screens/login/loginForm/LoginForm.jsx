@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { auth } from '../../../config/firebase';
 import { useAppDispatch } from '../../../app/store';
 import { setLoading, setError } from '../../../features/authSlice';
 import ButtonCustom from '../../../components/button/ButtonCustom';
@@ -16,11 +15,7 @@ const LoginForm = () => {
         dispatch(setLoading(true));
 
         try {
-            await auth.signInWithEmailAndPassword(email, password);
-            dispatch(setLoading(false));
         } catch (error) {
-            dispatch(setError(error.message));
-            dispatch(setLoading(false));
         }
     };
 
